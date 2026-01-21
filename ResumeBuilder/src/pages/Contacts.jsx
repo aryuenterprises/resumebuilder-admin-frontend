@@ -1,4 +1,4 @@
-import Contacts_Mainbar from "../components/Contacts Components/Contacts_Mainbar";
+import Contacts_Mainbar from "../components/ContactsComponents/Contacts_Mainbar";
 import Sidebar from "../components/Sidebar";
 
 const Contacts = () => {
