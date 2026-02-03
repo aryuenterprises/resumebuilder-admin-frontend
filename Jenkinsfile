@@ -1,45 +1,33 @@
 pipeline {
-  agent any
+    agent any
 
-  tools {
-    nodejs "node18"
-  }
+    environment {
+        WORKSPACE_DIR = "${WORKSPACE}"
+        DEPLOY_DIR    = "/var/www/aryu_resumebuilder/resumebuilderadmin-reactjs/ResumeBuilder/dist"
+    }
 
-  stages {
+    stages {
 
-    stage('Install') {
-      steps {
-        dir('ResumeBuilder') {
-          sh 'npm install'
+        stage('Verify dist exists in workspace') {
+            steps {
+                sh '''
+                    if [ ! -d "$WORKSPACE_DIR/dist" ]; then
+                      echo "ERROR: dist not found. Dev must push build."
+                      exit 1
+                    fi
+                '''
+            }
         }
-      }
-    }
 
-    stage('Build') {
-      steps {
-        dir('ResumeBuilder') {
-          sh 'npm run build'
+        stage('Deploy static files') {
+            steps {
+                sh '''
+                    rm -rf $DEPLOY_DIR/*
+                    cp -r $WORKSPACE_DIR/dist/* $DEPLOY_DIR/
+                '''
+            }
         }
-      }
+
     }
-
-    stage('Deploy') {
-      steps {
-        sh '''
-          set -e
-
-          TMP_DIR=/tmp/admin_build_$(date +%s)
-          mkdir -p $TMP_DIR
-
-          cp -r ResumeBuilder/dist/* $TMP_DIR/
-
-          sudo rm -rf /var/www/aryu_resumebuilder/resumebuilderadmin-reactjs/dist/*
-          sudo cp -r $TMP_DIR/* /var/www/aryu_resumebuilder/resumebuilderadmin-reactjs/dist/
-
-          rm -rf $TMP_DIR
-        '''
-      }
-    }
-  }
 }
 
