@@ -78,11 +78,11 @@ const Sidebar = () => {
   const sidebarMenuItems = [
     { label: "Dashboard", path: "dashboard", icon: <CiBoxList /> },
     { label: "Registered Users", path: "users-list", icon: <LuUsers /> },
-    {
-      label: "Desired Jobs Title",
-      path: "desired-jobs-title",
-      icon: <MdWorkOutline />,
-    },
+    // {
+    //   label: "Desired Jobs Title",
+    //   path: "desired-jobs-title",
+    //   icon: <MdWorkOutline />,
+    // },
     {
       label: "Plan Subscription",
       path: "plan-subscription",
