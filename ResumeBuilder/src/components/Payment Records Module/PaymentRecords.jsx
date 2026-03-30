@@ -20,6 +20,7 @@ const PaymentRecords = () => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  console.log("data:", data);
   const [currencySymbol, setCurrencySymbol] = useState("");
   console.log("currencySymbol:", currencySymbol);
   const [user, setUser] = useState(null);
@@ -48,13 +49,17 @@ const PaymentRecords = () => {
   const fetchToneResume = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/api/payment/payment-records`
+        `${API_URL}/api/payment-razor/payment-all-records`,{
+          params: {
+            type:"all"
+          }
+        }
       );
       console.log("Payment Records Response:", response.data);
       // console.log("Payment currency:", response.data?.paymentRecord.currencyType);
       if (response.data) {
         setData(response.data?.paymentRecord);
-        setCurrencySymbol(response.data?.paymentRecord?.currencyAmount);
+        setCurrencySymbol(response.data?.settings?.[0]?.currencyType);
         setLoading(false);
       } else {
         setErrors("Failed to fetch Tone Resume.");
@@ -75,10 +80,10 @@ const PaymentRecords = () => {
     setDisplayBasic(true);
   };
 
-  const rolesWithSno = data.map((data, index) => ({
-    ...data,
-    Sno: index + 1,
-  }));
+  // const rolesWithSno = data ? data.map((data, index) => ({
+  //   ...data,
+  //   Sno: index + 1,
+  // })) : [];
 
   const [expandedRows, setExpandedRows] = useState([]);
 
@@ -104,12 +109,12 @@ const PaymentRecords = () => {
   },
    {
     title: "Amount",
-    data: "currencyAmount",
-    render:(data)=> `${data || ""}`,
+    data: "amount",
+    // render:(data)=> `${data || ""}`,
     // render: function (data, type, row) {
     //   return `£ ${row?.planId?.price || 0}`;
     // },
-    // render: (data) => `${currencySymbol} ${data}`,
+    render: (data) => `${currencySymbol} ${data}`,
   },
   
 
@@ -158,7 +163,7 @@ const PaymentRecords = () => {
     title: "Status",
     data: "status",
     render: function (data, type, row) {
-      const color = row.status === "succeeded" ? "green" : "red";
+      const color = row.status === "paid" ? "green" : "red";
       return `
         <span style="
           color:${color};
@@ -256,10 +261,10 @@ const PaymentRecords = () => {
             <strong>Email:</strong>
             <p>{user?.userId?.email || "N/A"}</p>
           </div>
-          <div>
+          {/* <div>
             <strong>Card No:</strong>
             <p>{user?.paymentDetails?.last4 || "N/A"}</p>
-          </div>
+          </div> */}
           <div>
             <strong>Transaction ID:</strong>
             <p>{user?.paymentId || "N/A"}</p>
@@ -338,8 +343,8 @@ const PaymentRecords = () => {
             User Details{" "}
             <span
               style={{
-                color: user?.status === "succeeded" ? "green" : "red",
-                border: `1px solid  ${user?.status === "succeeded" ? "green" : "red"
+                color: user?.status === "paid" ? "green" : "red",
+                border: `1px solid  ${user?.status === "paid" ? "green" : "red"
                   }`,
                 borderRadius: "9999px",
                 display: "inline-block",
@@ -349,7 +354,7 @@ const PaymentRecords = () => {
                 fontWeight: 500,
               }}
             >
-              {user?.status === "succeeded" ? "SUCCEEDED" : "UNSUCCEEDED"}
+              {user?.status === "paid" ? "SUCCEEDED" : "UNSUCCEEDED"}
             </span>
           </span>
         }

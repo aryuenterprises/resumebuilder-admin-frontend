@@ -331,7 +331,7 @@ const UserList_Mainbar = () => {
 
             <div>
               <strong>Plan Price:</strong>
-              <p>{plan?.currencyAmount || ""}</p>
+              <p>{plan?.amount || ""}</p>
             </div>
 
             <div>
@@ -343,8 +343,8 @@ const UserList_Mainbar = () => {
               <strong>Status: </strong>
               <p
                 style={{
-                  color: plan?.status === "succeeded" ? "green" : "red",
-                  border: `1px solid ${plan?.status === "succeeded" ? "green" : "red"
+                  color: plan?.status === "paid" ? "green" : "red",
+                  border: `1px solid ${plan?.status === "paid" ? "green" : "red"
                     }`,
                   borderRadius: "9999px",
                   display: "inline-block",
