@@ -588,9 +588,9 @@ const PlanSubscription = () => {
                           >
                             <option value="">Select a plan</option>
                             <option value="free">Free</option>
-                            <option value="one time">One Time</option>
+                            <option value="one month">One Month</option>
+                            <option value="six months">Six Months</option>
                             <option value="unlimited">Unlimited</option>
-                            <option value="7-days access">7-days access</option>
                           </select>
                           {formik.touched.plan && formik.errors.plan ? (
                             <div className="text-red-500">
