@@ -269,6 +269,7 @@ const PlanSubscription = () => {
   const formik = useFormik({
     initialValues: {
       name: planSubscriptionDetails ? planSubscriptionDetails.name : "",
+      title: planSubscriptionDetails ? planSubscriptionDetails.title : "",
       description: planSubscriptionDetails
         ? planSubscriptionDetails.description
         : "",
@@ -279,7 +280,9 @@ const PlanSubscription = () => {
     },
     enableReinitialize: true,
     validationSchema: Yup.object({
-      name: Yup.string().required("Title Is Required"),
+      name: Yup.string().required("Name Is Required"),
+      title: Yup.string().required("Title Is Required"),
+
       description: Yup.string().required("Description Is Required"),
       price: Yup.number().required("Price Is Required"),
       plan: Yup.string().required("Plan Is Required"),
@@ -295,6 +298,7 @@ const PlanSubscription = () => {
             `${API_URL}/api/plan-subscription/edit/${planSubscriptionDetails._id}`,
             {
               name: values.name,
+              title:values.title,
               description: values.description,
               price: values.price,
               status: values.status,
@@ -309,6 +313,7 @@ const PlanSubscription = () => {
             `${API_URL}/api/plan-subscription/create`,
             {
               name: values.name,
+              title:values.title,
               description: values.description,
               price: values.price,
               status: values.status,
@@ -342,8 +347,12 @@ const PlanSubscription = () => {
         <div className="">
           <div className="flex flex-col gap-4">
             <div>
-              <strong>Job Title:</strong>
+              <strong>Job Name:</strong>
               <p>{selectedUser.name || "N/A"}</p>
+            </div>
+            <div>
+              <strong>Job Title:</strong>
+              <p>{selectedUser.title || "N/A"}</p>
             </div>
             <div>
               <strong>Price:</strong>
@@ -505,6 +514,32 @@ const PlanSubscription = () => {
                           {formik.touched.name && formik.errors.name ? (
                             <div className="text-red-500">
                               {formik.errors.name}
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                      <div className="mt-8 flex justify-between items-center ">
+                        <div className="">
+                          <label
+                            htmlFor="jobtitle"
+                            className="block text-md font-medium mb-2 mt-3"
+                          >
+                            Title <span className="text-red-500">*</span>
+                          </label>
+                        </div>
+                        <div className="w-[60%] md:w-[70%]">
+                          <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.title}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          />
+                          {formik.touched.title && formik.errors.title ? (
+                            <div className="text-red-500">
+                              {formik.errors.title}
                             </div>
                           ) : null}
                         </div>
